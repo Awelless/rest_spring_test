@@ -28,7 +28,7 @@ Vue.component('message-form', {
     template:
         '<div>' +
             '<input type="text" placeholder="your message..." v-model="text" />' +
-            '<input type="button" value="post" @click="save" />' +
+            '<input type="button" value="save" @click="save" />' +
         '</div>',
     methods: {
         save: function() {
