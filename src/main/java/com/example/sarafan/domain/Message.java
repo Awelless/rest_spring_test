@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Table
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 public class Message {
 
