@@ -1,7 +1,6 @@
 package com.example.sarafan.config;
 
 import com.example.sarafan.domain.User;
-import com.example.sarafan.repo.UserDetailsRepo;
 import com.example.sarafan.repo.UserRepo;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
