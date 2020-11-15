@@ -16,10 +16,8 @@ public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @NonNull
     @JsonView(Views.Id.class)
     private Long id;
-    @NonNull
     @JsonView(Views.IdName.class)
     private String text;
 
