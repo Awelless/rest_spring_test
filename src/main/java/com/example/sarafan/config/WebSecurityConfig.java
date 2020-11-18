@@ -19,11 +19,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .antMatcher("/**")
                 .authorizeRequests()
-                    .antMatchers("/", "/login**", "/error**", "/js/**")
-                    .permitAll()
-                .anyRequest()
-                    .authenticated()
+                    .antMatchers("/", "/login**", "/js/**", "/error**").permitAll()
+                    .anyRequest().authenticated()
                 .and()
                     .logout()
                     .logoutSuccessUrl("/")
@@ -33,10 +32,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PrincipalExtractor principalExtractor(UserRepo userDetailsRepo) {
+    public PrincipalExtractor principalExtractor(UserRepo userRepo) {
         return map -> {
             String id = (String) map.get("sub");
-            User user = userDetailsRepo.findById(id).orElseGet(() -> {
+
+            User user = userRepo.findById(id).orElseGet(() -> {
                 User newUser = new User();
 
                 newUser.setId(id);
@@ -51,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
             user.setLastVisit(LocalDateTime.now());
 
-            return userDetailsRepo.save(user);
+            return userRepo.save(user);
         };
     }
 }

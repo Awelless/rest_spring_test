@@ -1,36 +1,29 @@
 {
-  "name": "sarafan",
+  "name": "rest_spring_test",
   "version": "1.0.0",
-  "description": "",
-  "main": "webpack.config.js",
-  "dependencies": {
-    "@stomp/stompjs": "^6.0.0",
-    "sockjs-client": "^1.5.0",
-    "vue": "^2.5.17",
-    "vue-resource": "^1.5.1"
+  "main": "index.js",
+  "repository": "https://github.com/Awelless/rest_spring_test.git",
+  "author": "Awelless <hahaha.funny.yellow.dog@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "webpack serve"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "babel-loader": "^8.0.1",
-    "vue-loader": "^15.4.1",
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "@stomp/stompjs": "^6.0.0",
+    "babel-loader": "^8.2.1",
+    "css-loader": "1.0.1",
+    "vue": "^2.6.12",
+    "vue-loader": "^15.9.5",
+    "vue-resource": "^1.5.1",
+    "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.12",
-    "webpack": "^4.17.1",
-    "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.7"
+    "webpack": "^5.5.1",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0"
   },
-  "scripts": {
-    "start": "webpack-dev-server",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/drucoder/sarafan.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/drucoder/sarafan/issues"
-  },
-  "homepage": "https://github.com/drucoder/sarafan#readme"
+  "dependencies": {
+    "vuetify": "^2.3.18"
+  }
 }
