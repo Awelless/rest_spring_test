@@ -16,8 +16,13 @@ import java.util.HashMap;
 @Controller
 @RequestMapping("/")
 public class MainController {
+
+    private final MessageRepo messageRepo;
+
     @Autowired
-    private MessageRepo messageRepo;
+    public MainController(MessageRepo messageRepo) {
+        this.messageRepo = messageRepo;
+    }
 
     @Value("${spring.profiles.active}")
     private String profile;
