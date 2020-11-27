@@ -32,6 +32,8 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
+	compile('org.jsoup:jsoup:1.11.3')
+
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
