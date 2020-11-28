@@ -1,6 +1,7 @@
 package com.example.sarafan.controller;
 
 import com.example.sarafan.domain.Message;
+import com.example.sarafan.domain.User;
 import com.example.sarafan.domain.Views;
 import com.example.sarafan.dto.EventType;
 import com.example.sarafan.dto.MetaDto;
@@ -14,6 +15,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -58,10 +60,12 @@ public class MessageController {
 
     @PostMapping
     public Message create(
+            @AuthenticationPrincipal User user,
             @RequestBody Message message
     ) throws IOException {
         message.setCreatedAt(LocalDateTime.now());
         fillMeta(message);
+        message.setAuthor(user);
         Message createdMessage = messageRepo.save(message);
 
         wsSender.accept(EventType.CREATE, createdMessage);

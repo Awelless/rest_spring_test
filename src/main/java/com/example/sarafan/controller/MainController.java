@@ -1,7 +1,11 @@
 package com.example.sarafan.controller;
 
 import com.example.sarafan.domain.User;
+import com.example.sarafan.domain.Views;
 import com.example.sarafan.repo.MessageRepo;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,10 +22,15 @@ import java.util.HashMap;
 public class MainController {
 
     private final MessageRepo messageRepo;
+    private final ObjectWriter writer;
 
     @Autowired
-    public MainController(MessageRepo messageRepo) {
+    public MainController(MessageRepo messageRepo, ObjectMapper mapper) {
         this.messageRepo = messageRepo;
+
+        this.writer = mapper
+                .setConfig(mapper.getSerializationConfig())
+                .writerWithView(Views.FullMessage.class);
     }
 
     @Value("${spring.profiles.active}")
@@ -31,23 +40,20 @@ public class MainController {
     public String main(
             @AuthenticationPrincipal User user,
             Model model
-    ) {
+    ) throws JsonProcessingException {
 
         HashMap<Object, Object> data = new HashMap<>();
 
         if (user != null) {
             data.put("profile", user);
-            data.put("messages", messageRepo.findAll());
+
+            String messages = writer.writeValueAsString(messageRepo.findAll());
+            model.addAttribute("messages", messages);
         }
 
         model.addAttribute("frontendData", data);
         model.addAttribute("isDevMode", "dev".equals(profile));
 
-        return "index";
-    }
-
-    @GetMapping("/login")
-    public String test() {
         return "index";
     }
 }

@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import messagesApi from 'api/messages';
+import messagesApi from 'api/messages'
+import commentApi from 'api/comment'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        messages: frontendData.messages,
+        messages,
         profile:  frontendData.profile
     },
     getters: {
@@ -21,6 +22,7 @@ export default new Vuex.Store({
         },
         updateMessageMutation(state, message) {
             const updateIndex = state.messages.findIndex(item => item.id === message.id)
+
             state.messages = [
                 ...state.messages.slice(0, updateIndex),
                 message,
@@ -29,12 +31,29 @@ export default new Vuex.Store({
         },
         removeMessageMutation(state, message) {
             const deletionIndex = state.messages.findIndex(item => item.id === message.id)
+
             if (deletionIndex > -1) {
                 state.messages = [
                     ...state.messages.slice(0, deletionIndex),
                     ...state.messages.slice(deletionIndex + 1)
                 ]
             }
+        },
+        addCommentMutation(state, comment) {
+            const updateIndex = state.messages.findIndex(item => item.id === comment.message.id)
+            const message = state.messages[updateIndex]
+
+            state.messages = [
+                ...state.messages.slice(0, updateIndex),
+                {
+                    ...message,
+                    comments: [
+                        ...message.comments,
+                        comment
+                    ]
+                },
+                ...state.messages.slice(updateIndex + 1)
+            ]
         }
     },
     actions: {
@@ -51,7 +70,7 @@ export default new Vuex.Store({
         },
         async updateMessageAction({commit}, message) {
             const result = await messagesApi.update(message)
-            const data = await result.json()
+            const data   = await result.json()
 
             commit('updateMessageMutation', data)
         },
@@ -60,6 +79,12 @@ export default new Vuex.Store({
             if (result.ok) {
                 commit('removeMessageMutation', message)
             }
+        },
+        async addCommentAction({commit, state}, comment) {
+            const result = await commentApi.add(comment)
+            const data   = await result.json()
+
+            commit('addCommentMutation', comment)
         }
     }
 })
