@@ -43,17 +43,19 @@ export default new Vuex.Store({
             const updateIndex = state.messages.findIndex(item => item.id === comment.message.id)
             const message = state.messages[updateIndex]
 
-            state.messages = [
-                ...state.messages.slice(0, updateIndex),
-                {
-                    ...message,
-                    comments: [
-                        ...message.comments,
-                        comment
-                    ]
-                },
-                ...state.messages.slice(updateIndex + 1)
-            ]
+            if (!message.comments.find(it => it.id === comment.id)) {
+                state.messages = [
+                    ...state.messages.slice(0, updateIndex),
+                    {
+                        ...message,
+                        comments: [
+                            ...message.comments,
+                            comment
+                        ]
+                    },
+                    ...state.messages.slice(updateIndex + 1)
+                ]
+            }
         }
     },
     actions: {
@@ -84,7 +86,7 @@ export default new Vuex.Store({
             const result = await commentApi.add(comment)
             const data   = await result.json()
 
-            commit('addCommentMutation', comment)
+            commit('addCommentMutation', data)
         }
     }
 })
