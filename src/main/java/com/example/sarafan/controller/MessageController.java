@@ -78,7 +78,7 @@ public class MessageController {
             @PathVariable("id") Message messageFromDb,
             @RequestBody Message message
     ) throws IOException {
-        BeanUtils.copyProperties(message, messageFromDb, "id", "createdAt");
+        BeanUtils.copyProperties(message, messageFromDb, "id", "createdAt", "comments");
         fillMeta(messageFromDb);
         Message updatedMessage = messageRepo.save(messageFromDb);
 

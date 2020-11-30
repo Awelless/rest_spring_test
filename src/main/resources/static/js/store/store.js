@@ -59,7 +59,7 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        async addMessageAction({commit}, message) {
+        async addMessageAction({commit, state}, message) {
             const result = await messagesApi.add(message)
             const data   = await result.json()
             const index  = state.messages.findIndex(item => item.id === data.id)
