@@ -1,9 +1,16 @@
 package com.example.sarafan.domain;
 
-import com.fasterxml.jackson.annotation.*;
+import com.example.sarafan.dto.MessageDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.codehaus.jackson.map.util.BeanUtil;
+import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,6 +21,11 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = { "id" })
+@JsonIdentityInfo(
+        property = "id",
+        generator = ObjectIdGenerators.PropertyGenerator.class
+)
 public class Message {
 
     @Id
@@ -35,7 +47,6 @@ public class Message {
 
     @OneToMany(mappedBy = "message", orphanRemoval = true)
     @JsonView(Views.FullMessage.class)
-    @JsonManagedReference
     private List<Comment> comments;
 
     @JsonView(Views.FullMessage.class)
@@ -46,4 +57,8 @@ public class Message {
     private String linkDescription;
     @JsonView(Views.FullMessage.class)
     private String linkCover;
+
+    public Message(MessageDto messageDto) {
+        BeanUtils.copyProperties(messageDto, this);
+    }
 }

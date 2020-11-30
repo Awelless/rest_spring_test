@@ -8,7 +8,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         messages,
-        profile:  frontendData.profile
+        ...frontendData
     },
     getters: {
         sortedMessages: state => (state.messages || []).sort((a, b) => b.id - a.id)
@@ -40,10 +40,23 @@ export default new Vuex.Store({
             }
         },
         addCommentMutation(state, comment) {
+
+            console.log(comment.message.id)
+
             const updateIndex = state.messages.findIndex(item => item.id === comment.message.id)
             const message = state.messages[updateIndex]
 
-            if (!message.comments.find(it => it.id === comment.id)) {
+            console.log(message)
+
+            if (message.comments === null) {
+                state.messages = [
+                    ...state.messages.slice(0, updateIndex),
+                    {
+                        ...message, comments: [comment]
+                    },
+                    ...state.messages.slice(updateIndex + 1)
+                ]
+            } else if (!message.comments.find(it => it.id === comment.id)) {
                 state.messages = [
                     ...state.messages.slice(0, updateIndex),
                     {
@@ -56,13 +69,29 @@ export default new Vuex.Store({
                     ...state.messages.slice(updateIndex + 1)
                 ]
             }
+        },
+        addMessagePageMutation(state, messages) {
+            const targetMessages = state.messages
+                .concat(messages)
+                .reduce((res, val) => {
+                    res[val.id] = val
+                    return res
+                }, {})
+
+            state.messages = Object.values(targetMessages)
+        },
+        updateCurrentPageMutation(state, currentPage) {
+            state.currentPage = currentPage
+        },
+        updateTotalPagesMutation(state, totalPages) {
+            state.totalPages = totalPages
         }
     },
     actions: {
         async addMessageAction({commit, state}, message) {
-            const result = await messagesApi.add(message)
-            const data   = await result.json()
-            const index  = state.messages.findIndex(item => item.id === data.id)
+            const response = await messagesApi.add(message)
+            const data     = await response.json()
+            const index    = state.messages.findIndex(item => item.id === data.id)
 
             if (index > -1) {
                 commit('updateMessageMutation', data)
@@ -71,22 +100,32 @@ export default new Vuex.Store({
             }
         },
         async updateMessageAction({commit}, message) {
-            const result = await messagesApi.update(message)
-            const data   = await result.json()
+            const response = await messagesApi.update(message)
+            const data     = await response.json()
 
             commit('updateMessageMutation', data)
         },
         async removeMessageAction({commit}, message) {
-            const result = await messagesApi.remove(message.id)
+            const response = await messagesApi.remove(message.id)
             if (result.ok) {
                 commit('removeMessageMutation', message)
             }
         },
         async addCommentAction({commit, state}, comment) {
-            const result = await commentApi.add(comment)
-            const data   = await result.json()
+            const response = await commentApi.add(comment)
+            const data     = await response.json()
+
+            console.log(data)
 
             commit('addCommentMutation', data)
+        },
+        async loadPageAction({commit, state}) {
+            const response = await messagesApi.page(state.currentPage + 1)
+            const data     = await response.json()
+
+            commit('addMessagePageMutation',    data.messages)
+            commit('updateCurrentPageMutation', Math.min(data.currentPage, data.totalPages - 1))
+            commit('updateTotalPagesMutation',  data.totalPages)
         }
     }
 })
