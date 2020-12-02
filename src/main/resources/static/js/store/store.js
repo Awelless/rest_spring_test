@@ -8,6 +8,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         messages,
+        profile,
         ...frontendData
     },
     getters: {
@@ -107,7 +108,7 @@ export default new Vuex.Store({
         },
         async removeMessageAction({commit}, message) {
             const response = await messagesApi.remove(message.id)
-            if (result.ok) {
+            if (response.ok) {
                 commit('removeMessageMutation', message)
             }
         },
