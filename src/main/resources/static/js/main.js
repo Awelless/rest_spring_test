@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import '@babel/polyfill'
-import 'api/resource'
-import router from 'router/router'
-import App from 'pages/App.vue'
-import store  from 'store/store'
-import { connect } from 'util/ws'
+import 'static/js/apiapi/resource'
+import router from 'static/js/router/router'
+import App from 'static/js/pages/App.vue'
+import store  from 'static/js/store/store'
+import { connect } from 'static/js/util/ws'
 import 'vuetify/dist/vuetify.min.css'
 
-if (frontendData.profile) {
+if (profile) {
     connect()
 }
 

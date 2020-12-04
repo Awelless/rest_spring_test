@@ -29,11 +29,11 @@ import java.util.stream.Collectors;
 @Service
 public class MessageService {
 
-    private static String URL_PATTERN = "https?:\\/\\/?[\\w\\d\\._\\-%\\/\\?=&#]+";
-    private static String IMG_PATTERN = "\\.(jpeg|jpg|gif|png)$";
+    private static final String URL_PATTERN = "https?:\\/\\/?[\\w\\d\\._\\-%\\/\\?=&#]+";
+    private static final String IMG_PATTERN = "\\.(jpeg|jpg|gif|png)$";
 
-    private static Pattern URL_REGEX = Pattern.compile(URL_PATTERN, Pattern.CASE_INSENSITIVE);
-    private static Pattern IMG_REGEX = Pattern.compile(IMG_PATTERN, Pattern.CASE_INSENSITIVE);
+    private static final Pattern URL_REGEX = Pattern.compile(URL_PATTERN, Pattern.CASE_INSENSITIVE);
+    private static final Pattern IMG_REGEX = Pattern.compile(IMG_PATTERN, Pattern.CASE_INSENSITIVE);
 
     private final MessageRepo messageRepo;
     private final UserSubscriptionRepo userSubscriptionRepo;
@@ -68,10 +68,7 @@ public class MessageService {
         );
     }
 
-    public Message create(MessageDto messageDto, User user) throws IOException {
-
-        Message message = new Message(messageDto);
-
+    public Message create(Message message, User user) throws IOException {
         message.setCreatedAt(LocalDateTime.now());
         fillMeta(message);
         message.setAuthor(user);
@@ -82,8 +79,8 @@ public class MessageService {
         return createdMessage;
     }
 
-    public Message update(Message messageFromDb, MessageDto messageDto) throws IOException {
-        BeanUtils.copyProperties(messageDto, messageFromDb, "id", "createdAt", "comments", "author");
+    public Message update(Message messageFromDb, Message message) throws IOException {
+        BeanUtils.copyProperties(message, messageFromDb, "id", "createdAt", "comments", "author");
         fillMeta(messageFromDb);
         Message updatedMessage = messageRepo.save(messageFromDb);
 

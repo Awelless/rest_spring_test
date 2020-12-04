@@ -1,6 +1,5 @@
 package com.example.sarafan.domain;
 
-import com.example.sarafan.dto.MessageDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -9,8 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.codehaus.jackson.map.util.BeanUtil;
-import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -58,8 +55,4 @@ public class Message {
     private String linkDescription;
     @JsonView(Views.FullMessage.class)
     private String linkCover;
-
-    public Message(MessageDto messageDto) {
-        BeanUtils.copyProperties(messageDto, this);
-    }
 }

@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import { addHandler } from 'util/ws'
+    import { addHandler } from 'static/js/util/ws'
     import { mapState, mapMutations } from 'vuex'
 
     export default {

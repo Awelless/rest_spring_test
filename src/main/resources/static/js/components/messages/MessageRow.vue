@@ -25,9 +25,9 @@
 
 <script>
     import { mapActions } from 'vuex'
-    import Media from 'components/media/Media.vue'
+    import Media from 'static/js/components/media/Media.vue'
     import CommentList from '../comment/CommentList.vue'
-    import UserLink from 'components/UserLink.vue'
+    import UserLink from 'static/js/components/UserLink.vue'
 
     export default {
         props: ['message', 'editMessage'],

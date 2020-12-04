@@ -3,7 +3,6 @@ package com.example.sarafan.controller;
 import com.example.sarafan.domain.Message;
 import com.example.sarafan.domain.User;
 import com.example.sarafan.domain.Views;
-import com.example.sarafan.dto.MessageDto;
 import com.example.sarafan.dto.MessagePageDto;
 import com.example.sarafan.service.MessageService;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -51,22 +50,24 @@ public class MessageController {
     }
 
     @PostMapping
+    @JsonView(Views.FullMessage.class)
     public Message create(
             @AuthenticationPrincipal User user,
-            @RequestBody MessageDto messageDto
+            @RequestBody Message message
     ) throws IOException {
-        return messageService.create(messageDto, user);
+        return messageService.create(message, user);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("{id}")
+    @JsonView(Views.FullMessage.class)
     public Message update(
             @PathVariable("id") Message messageFromDb,
-            @RequestBody MessageDto messageDto
+            @RequestBody Message message
     ) throws IOException {
-        return messageService.update(messageFromDb, messageDto);
+        return messageService.update(messageFromDb, message);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public void delete(
             @PathVariable("id") Message message
     ) {
